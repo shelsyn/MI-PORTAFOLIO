@@ -56,17 +56,15 @@ const Navbar = () => {
     >
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
         <Link
+
           to="/"
           className="flex items-center gap-2"
           onClick={() => {
             window.scrollTo(0, 0);
           }}
         >
-          <img src={logo} alt="logo" className="w-9 h-9 object-contain" />
-          <p className="text-white text-[18px] font-bold cursor-pointer flex ">
-            Liron &nbsp;
-            <span className="sm:block hidden"> | 3D Portfolio</span>
-          </p>
+          <img src={logo} alt="logo" className="w-25 h-10 object-contain" />
+          
         </Link>
 
         <ul className="list-none hidden sm:flex flex-row gap-10">

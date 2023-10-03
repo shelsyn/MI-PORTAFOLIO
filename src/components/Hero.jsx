@@ -1,51 +1,76 @@
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { styles } from '../styles';
 
-import { styles } from "../styles";
-import { ComputersCanvas } from "./canvas";
 
 const Hero = () => {
+  const [name, setName] = useState('');
+  const fullName = 'Shelsyn Guio';
+
+  useEffect(() => {
+    const typingDelay = 100; // Retardo entre cada caracter
+    const deletingDelay = 50; // Retardo al borrar caracteres
+    const newLineDelay = 1000; // Retardo después de escribir el nombre completo
+
+    let currentName = '';
+    let isDeleting = false;
+    let charIndex = 0;
+
+    const type = () => {
+      const currentChar = fullName[charIndex];
+
+      if (isDeleting) {
+        currentName = currentName.slice(0, -1);
+      } else {
+        currentName = fullName.slice(0, charIndex + 1);
+      }
+
+      setName(currentName);
+
+      if (!isDeleting && charIndex === fullName.length - 1) {
+        isDeleting = true;
+        setTimeout(() => {
+          isDeleting = false;
+          charIndex = 0;
+          setName('');
+          setTimeout(type, typingDelay);
+        }, newLineDelay);
+      } else if (isDeleting && currentName === '') {
+        charIndex = 0;
+        setTimeout(type, typingDelay);
+      } else {
+        charIndex += isDeleting ? -1 : 1;
+        setTimeout(type, isDeleting ? deletingDelay : typingDelay);
+      }
+    };
+
+    const initialTypingDelay = 1500; // Retardo antes de comenzar a escribir
+    setTimeout(type, initialTypingDelay);
+  }, []);
+
   return (
-    <section className={`relative w-full h-screen mx-auto`}>
+    <section className={`relative w-full h-[70vh] mx-auto`}>
       <div
         className={`absolute inset-0 top-[120px] max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
       >
         <div className="flex flex-col justify-center items-center mt-5">
-          <div className="w-5 h-5 rounded-full bg-[#915EFF]" />
+          <div className="w-5 h-5 rounded-full bg-[#c3a7ff]" />
           <div className="w-1 sm:h-80 h-40 violet-gradient" />
         </div>
-
+  
         <div>
           <h1 className={`${styles.heroHeadText} text-white`}>
-            Hi, I'm <span className="text-[#915EFF]">Liron</span>
+            Hi, I'm <span className="text-[#c3a7ff]">{name}</span>
           </h1>
           <p className={`${styles.heroSubText} mt-2 text-white-100`}>
-            I develop 3D visuals, user <br className="sm:block hidden" />
-            interfaces and web applications
+            Passionate software engineer experienced in <br className="sm:block hidden" />
+            innovative tech solutions.
           </p>
         </div>
       </div>
-      
-      <ComputersCanvas />
-
-      <div className="absolute xs:bottom-10 bottom-32 w-full flex justify-center items-center">
-        <a href="#about">
-          <div className="w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2">
-            <motion.div
-              animate={{
-                y: [0, 24, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "loop",
-              }}
-              className="w-3 h-3 rounded-full bg-secondary mb-1"
-            />
-          </div>
-        </a>
-      </div>
     </section>
   );
+  
 };
 
 export default Hero;
